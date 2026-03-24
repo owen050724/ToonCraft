@@ -30,14 +30,6 @@ OpenCV 기반 이미지 만화 스타일 변환 프로그램입니다.
 
 배치 요약 파일: [outputs/batch_demo/contact_sheet.png](outputs/batch_demo/contact_sheet.png)
 
-## 과제 조건 대응
-
-- 필수 기능: 이미지 처리 기법으로 입력 이미지를 만화 스타일로 변환
-- README 포함 내용:
-  - 만화 느낌이 잘 표현되는 데모
-  - 만화 느낌이 잘 표현되지 않는 데모
-  - 알고리즘 한계점 분석
-
 ## 알고리즘 개요
 
 1. Bilateral Filter로 텍스처를 줄이면서 윤곽은 유지
@@ -215,8 +207,3 @@ python cartoon_renderer.py --input input --style cinematic --contact-sheet --out
 - 이미지 장면에 따라 최적 파라미터가 달라 고정 파라미터의 일반화가 어려움
 - 자동 탐색 모드는 후보 중 상대적으로 좋은 결과를 선택하지만, 사람이 보는 주관적 선호와 다를 수 있음
 - K-means 양자화 특성상 색상 banding이 발생할 수 있으며, 강도를 높일수록 두드러질 수 있음
-
-## 참고
-
-- `CV_VideoRecorder/video_recorder.py`의 OpenCV 기반 구조를 참고하되,
-  본 프로젝트는 이미지 기반 cartoon rendering에 맞춰 별도 구현했습니다.
