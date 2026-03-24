@@ -2,6 +2,34 @@
 
 OpenCV 기반 이미지 만화 스타일 변환 프로그램입니다.
 
+## 대표 결과 미리보기
+
+아래 이미지는 실제 실행으로 생성된 대표 결과입니다.
+
+### Good Case (입력 대비 자연스러운 카툰화)
+
+![Good Case Compare](outputs/good_case_cartoon_compare.png)
+
+원본/결과 파일: [outputs/good_case_cartoon_compare.png](outputs/good_case_cartoon_compare.png), [outputs/good_case_cartoon.png](outputs/good_case_cartoon.png)
+
+### Bad Case (텍스처/노이즈가 많은 장면)
+
+![Bad Case Compare](outputs/bad_case_cartoon_compare.png)
+
+원본/결과 파일: [outputs/bad_case_cartoon_compare.png](outputs/bad_case_cartoon_compare.png), [outputs/bad_case_cartoon.png](outputs/bad_case_cartoon.png)
+
+### Advanced Feature (자동 탐색 후보 비교)
+
+![Auto Search Sheet](outputs/auto_case_cartoon_search_sheet.png)
+
+비교 시트 파일: [outputs/auto_case_cartoon_search_sheet.png](outputs/auto_case_cartoon_search_sheet.png)
+
+### Batch Summary (배치 처리 요약)
+
+![Batch Contact Sheet](outputs/batch_demo/contact_sheet.png)
+
+배치 요약 파일: [outputs/batch_demo/contact_sheet.png](outputs/batch_demo/contact_sheet.png)
+
 ## 과제 조건 대응
 
 - 필수 기능: 이미지 처리 기법으로 입력 이미지를 만화 스타일로 변환
@@ -46,7 +74,7 @@ python cartoon_renderer.py
 ### 단일 이미지 직접 지정
 
 ```powershell
-python cartoon_renderer.py --input examples/good_case.jpg --output outputs/good_case_cartoon.png --compare --save-steps
+python cartoon_renderer.py --input input/sample.jpg --output outputs/good_case_cartoon.png --style soft --cartoon-strength 0.72 --face-enhance --compare --save-steps
 ```
 
 주요 옵션:
@@ -96,7 +124,7 @@ python cartoon_renderer.py --auto-search --face-enhance --compare
 
 ## 데모 (필수)
 
-아래 두 케이스 이미지를 `input/`에 넣고 실행해서 결과 이미지를 첨부하세요.
+아래 두 케이스는 `input/sample.jpg`와 `input/sample_challenging.jpg`로 실제 실행한 결과입니다.
 
 ### 1) 잘 표현되는 이미지 데모
 
@@ -108,15 +136,20 @@ python cartoon_renderer.py --auto-search --face-enhance --compare
 
 예시 파일:
 
-- 입력: `input/good_case.jpg`
+- 입력: `input/sample.jpg`
 - 출력: `outputs/good_case_cartoon.png`
 - 비교: `outputs/good_case_cartoon_compare.png`
 
 실행:
 
 ```powershell
-python cartoon_renderer.py --input input --output-dir outputs --compare --save-steps
+python cartoon_renderer.py --input input/sample.jpg --output outputs/good_case_cartoon.png --style soft --cartoon-strength 0.72 --face-enhance --compare --save-steps
 ```
+
+결과 이미지:
+
+![Good Case Compare](outputs/good_case_cartoon_compare.png)
+![Good Case Output](outputs/good_case_cartoon.png)
 
 ### 2) 잘 표현되지 않는 이미지 데모
 
@@ -128,22 +161,60 @@ python cartoon_renderer.py --input input --output-dir outputs --compare --save-s
 
 예시 파일:
 
-- 입력: `input/bad_case.jpg`
+- 입력: `input/sample_challenging.jpg`
 - 출력: `outputs/bad_case_cartoon.png`
 - 비교: `outputs/bad_case_cartoon_compare.png`
 
 실행:
 
 ```powershell
-python cartoon_renderer.py --input input --output-dir outputs --compare --save-steps
+python cartoon_renderer.py --input input/sample_challenging.jpg --output outputs/bad_case_cartoon.png --style vivid --cartoon-strength 0.92 --compare --save-steps
 ```
+
+결과 이미지:
+
+![Bad Case Compare](outputs/bad_case_cartoon_compare.png)
+![Bad Case Output](outputs/bad_case_cartoon.png)
+
+## 추가 기능 실험 결과
+
+### 1) 자동 탐색 모드
+
+실행:
+
+```powershell
+python cartoon_renderer.py --input input/sample.jpg --output outputs/auto_case_cartoon.png --auto-search --face-enhance --compare
+```
+
+결과:
+
+- 최종 출력: `outputs/auto_case_cartoon.png`
+- 후보 비교 시트: `outputs/auto_case_cartoon_search_sheet.png`
+
+![Auto Search Sheet](outputs/auto_case_cartoon_search_sheet.png)
+
+### 2) 배치 처리 + Contact Sheet
+
+실행:
+
+```powershell
+python cartoon_renderer.py --input input --style cinematic --contact-sheet --output-dir outputs/batch_demo
+```
+
+결과:
+
+- `outputs/batch_demo/sample_cartoon.png`
+- `outputs/batch_demo/sample_challenging_cartoon.png`
+- `outputs/batch_demo/contact_sheet.png`
+
+![Batch Contact Sheet](outputs/batch_demo/contact_sheet.png)
 
 ## 알고리즘 한계점
 
-- 미세한 텍스처가 많은 영역은 과도하게 뭉개지거나 노이즈처럼 남을 수 있음
-- 밝기 대비가 약한 경계는 엣지 검출이 실패할 수 있음
+- 미세한 텍스처가 많은 영역은 과도하게 뭉개지거나 노이즈처럼 남을 수 있음 (예: `sample_challenging` 케이스)
 - 이미지 장면에 따라 최적 파라미터가 달라 고정 파라미터의 일반화가 어려움
-- K-means 양자화로 인해 색상 banding이 발생할 수 있음
+- 자동 탐색 모드는 후보 중 상대적으로 좋은 결과를 선택하지만, 사람이 보는 주관적 선호와 다를 수 있음
+- K-means 양자화 특성상 색상 banding이 발생할 수 있으며, 강도를 높일수록 두드러질 수 있음
 
 ## 참고
 
